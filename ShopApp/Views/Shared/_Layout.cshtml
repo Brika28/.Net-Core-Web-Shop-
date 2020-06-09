@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using ShopApp.Utility
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpcontextAccessor
+@using ShopApp.Extensions
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -40,13 +45,33 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
+                    @if (HttpcontextAccessor.HttpContext.Session.GetObject<List<int>>(SD.SessionCart) != null)
+                    {
+                        <li style="color:white;">
+                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link text-white">
+                                @{
+                                    var count = HttpcontextAccessor.HttpContext.Session.GetObject<List<int>>(SD.SessionCart).Count;
+                                }
+                                <i class="fas fa-shopping-cart"></i>&nbsp; (@count)
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li style="color:white;">
+                            <a href="#" class="nav-link text-white">
+                                
+                                <i class="fas fa-shopping-cart"></i>&nbsp; (0)
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
 
             <partial name="_LoginPartial" />
         </nav>
     </header>
-    <div class="container">
+    <div class="container my-3">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
